@@ -1,19 +1,18 @@
 import socket
 import sys
 
-ip = "192.168.15.1"
 
-porta = 22
+portas_lis = [20, 21, 22, 23, 25, 80, 443, 110, 3389]  #Lista para as portas
+
+for portas in portas_lis: #For loop para ler a lista e fazer as conexões
+    meusocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  #biblioteca socket
+    res = meusocket.connect_ex((sys.argv[1],portas))
+    
+    if (res == 0):  #Se for 0 então a porta está ativa
+        print("Porta" ,portas, "Aberta \n")
+        servico = meusocket.recv(1024) #Receber a resposta (no caso o banner da porta)
+        print(f"Serviço rodando na porta -----> {portas} ------> {servico} \n")
+        meusocket.close() #Fechar a conexão
 
 
-meusocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  #biblioteca socket
-res = meusocket.connect_ex((ip,porta))
-banner = meusocket.recv(1024)
 
-if (res == 0):
-    print ("Porta aberta",porta)
-else:
-    print ("Porta fechada",porta)
-print(banner)
-
-    #socket para se conectar a uma porta e ver se ela está fechada ou aberta!
